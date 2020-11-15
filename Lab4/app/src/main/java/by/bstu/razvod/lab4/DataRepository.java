@@ -1,18 +1,25 @@
 package by.bstu.razvod.lab4;
+
 import android.content.Context;
+
 import androidx.annotation.NonNull;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import by.bstu.razvod.lab4.model.ContactModel;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -23,6 +30,9 @@ public class DataRepository {
 
     private List<ContactModel> contacts = new ArrayList<>();
     private static final String FILE_NAME = "Contact-file";
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference();
 
     private Context context;
 
@@ -36,8 +46,8 @@ public class DataRepository {
 
     public void addNewContact(ContactModel contactModel) {
         contacts.add(contactModel);
-        setNewContact(contacts);
-        writeData(this.contacts);
+        setNewContact();
+        writeData(contactModel);
     }
 
     public void removeContact(ContactModel contactModel) {
@@ -46,37 +56,71 @@ public class DataRepository {
                 .findAny()
                 .orElse(null);
         this.contacts.remove(contact);
-        setNewContact(contacts);
-        writeData(this.contacts);
+        setNewContact();
+        // writeData(this.contacts);
     }
 
-    private void writeData(@NonNull List<ContactModel> newContact) {
+    private void writeData(ContactModel newContact) {
         assert newContact != null;
         try {
-            FileOutputStream file = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-            String jsonValue = new Gson().toJson(newContact);
-            file.write(jsonValue.getBytes(), 0, jsonValue.length());
-            file.close();
-            setNewContact(newContact);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+//            FileOutputStream file = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+//            String jsonValue = new Gson().toJson(newContact);
+//            file.write(jsonValue.getBytes(), 0, jsonValue.length());
+//            file.close();
+
+            myRef.push().setValue(newContact);
+
+            setNewContact();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
+//        catch (IOException e) {
+//            e.printStackTrace();
     }
+
 
 
     private void getData() {
-        try {
-            FileInputStream file = context.openFileInput(FILE_NAME);
-            String fileString = getFileContent(file, "UTF-8");
-            List<ContactModel> contactModels = new Gson().fromJson(fileString, new TypeToken<List<ContactModel>>() {}.getType());
-            if (contactModels != null) {
-                setNewContact(contactModels);
-            }
-            file.close();
-        } catch (Exception ignored) {
+//        try {
+//            FileInputStream file = context.openFileInput(FILE_NAME);
+//            String fileString = getFileContent(file, "UTF-8");
+//            List<ContactModel> contactModels = new Gson().fromJson(fileString, new TypeToken<List<ContactModel>>() {}.getType());
+//            if (contactModels != null) {
+//                setNewContact(contactModels);
+//            }
+//            file.close();
+//        } catch (Exception ignored) {
+//
+//        }
 
+        try {
+
+
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    List<ContactModel> contactModels = new ArrayList<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        ContactModel contact = ds.getValue(ContactModel.class);
+                        assert contact != null;
+                        contactModels.add(contact);
+                    }
+                    if (contactModels != null) {
+                        setNewContact();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+            myRef.addValueEventListener(valueEventListener);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -87,8 +131,8 @@ public class DataRepository {
                 .orElse(null);
     }
 
-    private void setNewContact(@NonNull List<ContactModel> contacts) {
-        this.contacts = contacts;
+    private void setNewContact() {
+//        this.contacts.add(contact);
         contactLiveData.onNext(this.contacts);
     }
 
