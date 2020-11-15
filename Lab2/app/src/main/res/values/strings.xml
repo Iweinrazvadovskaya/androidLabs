@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Lab2</string>
+    <string name="calculate">Calculate</string>
+    <string name="man">Man</string>
+    <string name="woman">Woman</string>
+    <string name="weight">weight</string>
+    <string name="weightText">WeightText</string>
+    <string name="height">Height</string>
+    <string name="weightLbl">WeightLbl</string>
+    <string name="sedentary_lifestyle">sedentary lifestyle</string>
+    <string name="moderate_activity">moderate activity</string>
+    <string name="medium_activity">medium activity</string>
+    <string name="active_people">active people</string>
+    <string name="athlete">athlete</string>
+    <string name="intup_you_r_information">Intup you\'r information</string>
+    <string name="normal_activit">normal activity</string>
+    <string name="height_activit">height activity</string>
+    <string name="low_activit">low activity</string>
+    <string name="ag">Age</string>
+    <string name="low_activity">low activity</string>
+    <string name="height_activity">height activity</string>
+    <string name="normal_activity">normal activity</string>
+    <string name="age">Age</string>
+</resources>

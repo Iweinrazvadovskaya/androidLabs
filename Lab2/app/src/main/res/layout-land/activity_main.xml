@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="onClick"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="118dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="306dp"
+        android:layout_marginEnd="307dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/calculate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/genderGroup"
+        android:layout_width="112dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="75dp"
+        app:layout_constraintBottom_toTopOf="@+id/calculateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activeGroup">
+
+        <RadioButton
+            android:id="@+id/manRadioButton"
+            android:layout_width="109dp"
+            android:layout_height="32dp"
+            android:backgroundTint="#3F51B5"
+            android:buttonTint="#2870AA"
+            android:text="@string/man" />
+
+        <RadioButton
+            android:id="@+id/womanRadioButton"
+            android:layout_width="109dp"
+            android:layout_height="32dp"
+            android:backgroundTint="#3F51B5"
+            android:buttonTint="#2870AA"
+            android:text="@string/woman" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="296dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="294dp"
+        android:text="@string/intup_you_r_information"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/activeGroup"
+        android:layout_width="229dp"
+        android:layout_height="103dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="78dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input">
+
+        <RadioButton
+            android:id="@+id/lowID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/low_activity" />
+
+        <RadioButton
+            android:id="@+id/heightID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/height_activity" />
+
+        <RadioButton
+            android:id="@+id/normalD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/normal_activity" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="69dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="114dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/height"
+        app:layout_constraintEnd_toStartOf="@+id/height"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="56dp"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        app:layout_constraintBottom_toTopOf="@+id/weightID"
+        app:layout_constraintEnd_toStartOf="@+id/activeGroup" />
+
+    <EditText
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="69dp"
+        android:layout_marginBottom="75dp"
+        android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="numberSigned"
+        app:layout_constraintBottom_toTopOf="@+id/calculateButton"
+        app:layout_constraintEnd_toStartOf="@+id/genderGroup" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="171dp"
+        android:text="@string/age"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/age" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="69dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="74dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="26dp"
+        android:text="@string/weight"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/weightID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/weightID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="57dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintBottom_toTopOf="@+id/age"
+        app:layout_constraintEnd_toStartOf="@+id/activeGroup" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
