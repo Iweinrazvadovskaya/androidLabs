@@ -2,13 +2,9 @@ package by.bstu.razvod.lab4;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -31,15 +27,18 @@ public class DataRepository {
     private List<ContactModel> contacts = new ArrayList<>();
     private static final String FILE_NAME = "Contact-file";
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference();
+    private DatabaseReference mydb;
+    final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private String CONTACT_KEY = auth.getCurrentUser().getUid();
 
     private Context context;
 
     @Inject
     DataRepository(@ApplicationContext Context context) {
         this.context = context;
-        getData();
+       // getData();
+
+        mydb = FirebaseDatabase.getInstance().getReference(CONTACT_KEY);
     }
 
     public BehaviorSubject<List<ContactModel>> contactLiveData = BehaviorSubject.createDefault(new ArrayList<ContactModel>());
@@ -48,6 +47,12 @@ public class DataRepository {
         contacts.add(contactModel);
         setNewContact();
         writeData(contactModel);
+    }
+
+    public void addContact(ContactModel contactModel) {
+        contacts.add(contactModel);
+        DatabaseReference ref = mydb.push();
+        setNewContact();
     }
 
     public void removeContact(ContactModel contactModel) {
@@ -67,8 +72,9 @@ public class DataRepository {
 //            String jsonValue = new Gson().toJson(newContact);
 //            file.write(jsonValue.getBytes(), 0, jsonValue.length());
 //            file.close();
+            DatabaseReference ref = mydb.push();
 
-            myRef.push().setValue(newContact);
+            mydb.push().setValue(newContact);
 
             setNewContact();
         }
@@ -94,34 +100,6 @@ public class DataRepository {
 //
 //        }
 
-        try {
-
-
-            ValueEventListener valueEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    List<ContactModel> contactModels = new ArrayList<>();
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        ContactModel contact = ds.getValue(ContactModel.class);
-                        assert contact != null;
-                        contactModels.add(contact);
-                    }
-                    if (contactModels != null) {
-                        setNewContact();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            };
-            myRef.addValueEventListener(valueEventListener);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public ContactModel getContact(int id){

@@ -128,5 +128,4 @@ public class DataSqlRepository {
             this.contacts = contacts;
             contactLiveData.onNext(this.contacts);
         }
-
 }

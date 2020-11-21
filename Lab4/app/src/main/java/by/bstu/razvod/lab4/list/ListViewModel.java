@@ -62,6 +62,10 @@ public class ListViewModel extends AndroidViewModel {
         dataRepository.addNewContact(contactModel);
     }
 
+    public void addContact(ContactModel contactModel) {
+        dataRepository.addContact(contactModel);
+    }
+
     public ContactModel getContact(int id){
         return dataRepository.getContact(id);
     }

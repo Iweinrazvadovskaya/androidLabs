@@ -15,10 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import by.bstu.razvod.lab4.MainViewPresentation;
 import by.bstu.razvod.lab4.R;
@@ -26,6 +30,7 @@ import by.bstu.razvod.lab4.addContact.AddContactActivity;
 import by.bstu.razvod.lab4.details.DetailsActivity;
 import by.bstu.razvod.lab4.extendes.ContextMenuListener;
 import by.bstu.razvod.lab4.extendes.ListAdapter;
+import by.bstu.razvod.lab4.model.ContactModel;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -79,6 +84,37 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
+        getDate();
+
+    }
+
+    private void getDate(){
+        try {
+
+
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    List<ContactModel> contactModels = new ArrayList<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        ContactModel contact = ds.getValue(ContactModel.class);
+                        assert contact != null;
+                        viewModel.addContact(contact);
+//                        contactModels.add(contact);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+            mydb.addValueEventListener(valueEventListener);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("ResourceType")
