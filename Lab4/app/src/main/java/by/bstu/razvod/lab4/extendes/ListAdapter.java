@@ -1,9 +1,7 @@
 package by.bstu.razvod.lab4.extendes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,8 +14,6 @@ import java.util.List;
 
 import by.bstu.razvod.lab4.MainViewPresentation;
 import by.bstu.razvod.lab4.R;
-import by.bstu.razvod.lab4.addContact.AddContactActivity;
-import by.bstu.razvod.lab4.details.DetailsActivity;
 import by.bstu.razvod.lab4.model.ContactModel;
 
 public class ListAdapter extends BaseAdapter {

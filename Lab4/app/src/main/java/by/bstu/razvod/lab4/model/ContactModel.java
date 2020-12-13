@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ContactModel implements Serializable {
+
     private int contactID;
     private String contactName;
     private String contactEmail;

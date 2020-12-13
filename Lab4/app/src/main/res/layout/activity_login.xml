@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".singin.LoginActivity">
+tools:context=".signin.LoginActivity">
 
 
 <ScrollView
@@ -38,6 +38,7 @@ tools:context=".singin.LoginActivity">
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="@string/password"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -47,7 +48,7 @@ tools:context=".singin.LoginActivity">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:onClick="Singin"
+            android:onClick="signIn"
             android:text="@string/singinUser"
             android:textColor="@android:color/white"
             app:backgroundTint="#03DAC5" />
@@ -60,7 +61,7 @@ tools:context=".singin.LoginActivity">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:onClick="StartSingup"
+            android:onClick="startSingup"
             android:text="@string/singupUser"
             android:textColor="@android:color/white"
             app:backgroundTint="#03DAC5" />

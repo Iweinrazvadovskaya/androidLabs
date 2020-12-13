@@ -3,17 +3,17 @@
     package="by.bstu.razvod.lab4">
 
     <application
-        android:name=".LabApplication"
+        android:name="by.bstu.razvod.lab4.LabApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".addContact.AddContactActivity" />
-        <activity android:name=".details.DetailsActivity" />
-        <activity android:name= ".list.MainActivity" />
-        <activity android:name= ".singin.LoginActivity" >
+        <activity android:name="by.bstu.razvod.lab4.contact.AddContactActivity" />
+        <activity android:name="by.bstu.razvod.lab4.details.DetailsActivity" />
+        <activity android:name= "by.bstu.razvod.lab4.main.MainActivity" />
+        <activity android:name= "by.bstu.razvod.lab4.signin.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <item
+        android:id="@+id/remove"
+        android:title="@string/remove"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/add"
+        app:showAsAction="never"
+        android:title="@string/add" />
+
+    <item
+        android:id="@+id/favorite"
+        app:showAsAction="never"
+        android:title="@string/menu_favorite" />
+
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+</menu>
