@@ -15,7 +15,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,14 +25,15 @@ import java.util.Random;
 
 import by.bstu.razvod.lab4.MainViewPresentation;
 import by.bstu.razvod.lab4.R;
-import by.bstu.razvod.lab4.addContact.AddContactActivity;
+import by.bstu.razvod.lab4.addcontact.AddContactActivity;
 import by.bstu.razvod.lab4.details.DetailsFragment;
 import by.bstu.razvod.lab4.extendes.ContextMenuListener;
-import by.bstu.razvod.lab4.extendes.DataAdapter;
+import by.bstu.razvod.lab4.util.EmptyDisposableCompletableObserver;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private RecyclerView listview;
@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity  {
     private GridLayoutManager layoutManager;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +59,13 @@ public class MainActivity extends AppCompatActivity  {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        DataAdapter adapter = new DataAdapter(this, new ArrayList<>(), mainViewPresentation -> {
+        MainAdapter adapter = new MainAdapter(this, new ArrayList<>(), mainViewPresentation -> {
             viewModel.changeSelection(mainViewPresentation);
         }, presentation -> {
-            long id = presentation.getModel().contactID;
+            long id = presentation.getModel().getContactID();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frame_layout, DetailsFragment.newInstance(id), "tag")
-                    .addToBackStack(new String(String.valueOf(new Random())))
+                    .addToBackStack(String.valueOf(new Random()))
                     .commit();
         }, new ContextMenuListener() {
             @Override
@@ -72,14 +75,15 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void favorite(MainViewPresentation presentation) {
-                viewModel.makeFavorite(presentation);
+                viewModel.makeFavorite(presentation)
+                        .subscribe(new EmptyDisposableCompletableObserver(compositeDisposable));
             }
 
             @Override
             public void copy(MainViewPresentation presentation) {
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("number", presentation.getModel().phoneNumber);
+                ClipData clip = ClipData.newPlainText("number", presentation.getModel().getPhoneNumber());
                 clipboard.setPrimaryClip(clip);
             }
 
@@ -89,7 +93,7 @@ public class MainActivity extends AppCompatActivity  {
 
         listview.setAdapter(adapter);
 
-        viewModel.contactLiveData.observe(this, contactModels -> {
+        viewModel.contactsLiveData.observe(this, contactModels -> {
             adapter.setItems(contactModels);
 
             adapter.notifyDataSetChanged();
@@ -111,32 +115,41 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.mymenu, menu);
-        // Retrieve the SearchView and plug it into SearchManager
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                String query = searchView.getQuery().toString();
-                viewModel.findContact(query);
+            public boolean onQueryTextSubmit(String query) {
+                viewModel.submitQuery(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.submitQuery(newText);
+                return false;
             }
         });
-//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.add:
                 Intent intent = new Intent(this, AddContactActivity.class);
                 startActivity(intent);
                 break;
             case R.id.remove:
 
-                for (int i = 0; i < viewModel.contactLiveData.getValue().size(); i++) {
-                    if (viewModel.contactLiveData.getValue().get(i).isSelected()) {
-                        viewModel.deleteContact(viewModel.contactLiveData.getValue().get(i));
+                for (int i = 0; i < viewModel.contactsLiveData.getValue().size(); i++) {
+                    if (viewModel.contactsLiveData.getValue().get(i).isSelected()) {
+                        viewModel.deleteContact(viewModel.contactsLiveData.getValue().get(i));
                     }
                 }
             case R.id.favorite:

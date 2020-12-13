@@ -38,4 +38,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="remove">-</string>
     <string name="search">Search</string>
+    <string name="action_edit">Edit</string>
 </resources>

@@ -15,8 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import by.bstu.razvod.lab4.R;
-import by.bstu.razvod.lab4.addContact.AddContactActivity;
-import by.bstu.razvod.lab4.model.ContactModel;
+import by.bstu.razvod.lab4.addcontact.AddContactActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -53,35 +52,34 @@ public class DetailsFragment extends Fragment {
         TextView socialLink = (TextView) view.findViewById(R.id.slink);
         TextView location = (TextView) view.findViewById(R.id.location);
         Button createContactBtn = (Button) view.findViewById(R.id.createContact);
-        ContactModel contactModel = viewModel.getContact(id);
-        name.setText(contactModel.getContactName());
-        phoneNumber.setText(contactModel.getPhoneNumber());
-        email.setText(contactModel.getEmail());
-        location.setText(contactModel.getLocation());
-        socialLink.setText(contactModel.getLinkSocialNetwork());
+        viewModel.initialize(id);
+        viewModel.getContact()
+                .observe(getViewLifecycleOwner(), contactModel -> {
+                    if (contactModel == null) return;
+                    name.setText(contactModel.getContactName());
+                    phoneNumber.setText(contactModel.getPhoneNumber());
+                    email.setText(contactModel.getContactEmail());
+                    location.setText(contactModel.getContactLocation());
+                    socialLink.setText(contactModel.getLinkSocialNetwork());
 
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String geo = "geo:0,0?q=" + location.getText().toString();
-                Uri geoUri =Uri.parse(geo);
-                Intent intent = new Intent(Intent.ACTION_VIEW, geoUri);
-                if (intent.resolveActivity(requireContext().getPackageManager()) != null){
-                    startActivity(intent);
-                }
+                    location.setOnClickListener(view12 -> {
+                        String geo = "geo:0,0?q=" + location.getText().toString();
+                        Uri geoUri = Uri.parse(geo);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, geoUri);
+                        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
 
-                startActivity(intent);
-            }
-        });
-        createContactBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), AddContactActivity.class);
-                intent.putExtra("id", contactModel.getId());
-                startActivity(intent);
-                requireActivity().finish();
-            }
-        });
+                        startActivity(intent);
+                    });
+                    createContactBtn.setOnClickListener(view1 -> {
+                        Intent intent = new Intent(requireActivity(), AddContactActivity.class);
+                        intent.putExtra("id", contactModel.getContactID());
+                        startActivity(intent);
+                        requireActivity().finish();
+                    });
+                });
+
     }
 
     @Nullable

@@ -24,8 +24,7 @@ public interface LearnDao {
     @Query("Delete FROM contacts WHERE contactID = :id")
     Completable delete(long id);
 
-//    void writeData();
-    @Query("SELECT * FROM contacts WHERE contact_name like :contact_name")
+    @Query("SELECT * FROM contacts WHERE contact_name like :contact_name OR phone_number like :contact_name OR contact_email like :contact_name")
     Observable<List<ContactEntity>> findElement(String contact_name);
 
     @Query("SELECT * FROM contacts WHERE contactID = :id")
