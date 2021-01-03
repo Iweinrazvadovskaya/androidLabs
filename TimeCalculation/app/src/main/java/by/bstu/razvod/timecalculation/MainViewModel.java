@@ -4,11 +4,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -16,7 +13,6 @@ public class MainViewModel extends AndroidViewModel {
     private BehaviorSubject<String> timeState = BehaviorSubject.createDefault("");
 
     public MutableLiveData<HashMap<String, Double>> calculatingResult = new MutableLiveData<>();
-
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -28,7 +24,7 @@ public class MainViewModel extends AndroidViewModel {
         calculatingResult.postValue(timeMap);
     }
 
-    public void changeSelection(HashMap<String, Double> timeMap) {
+    public void changeData(HashMap<String, Double> timeMap) {
         calculatingResult.postValue(timeMap);
     }
 
@@ -37,7 +33,7 @@ public class MainViewModel extends AndroidViewModel {
         timeMap.put("sec", time);
         timeMap.put("millisec", time * 1000);
         timeMap.put("microsec", time * 1000000.0);
-        changeSelection(timeMap);
+        changeData(timeMap);
     }
 
     public void calculateFromMilliseconds(double time){
@@ -45,7 +41,7 @@ public class MainViewModel extends AndroidViewModel {
         timeMap.put("sec", time / 1000);
         timeMap.put("millisec", time);
         timeMap.put("microsec", time * 1000.0);
-        changeSelection(timeMap);
+        changeData(timeMap);
     }
 
     public void calculateFromMicroseconds(double time){
@@ -53,7 +49,7 @@ public class MainViewModel extends AndroidViewModel {
         timeMap.put("sec", time / 1000000.0);
         timeMap.put("millisec", time / 1000);
         timeMap.put("microsec", time);
-        changeSelection(timeMap);
+        changeData(timeMap);
     }
 
     public boolean checkingInputData(Double time){

@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addListeners(){
         seconds.addTextChangedListener(secondsWatcher);
-        milliseconds.addTextChangedListener(microsecondsWatcher);
+        milliseconds.addTextChangedListener(millisecondsWatcher);
         microseconds.addTextChangedListener(microsecondsWatcher);
     }
 }
