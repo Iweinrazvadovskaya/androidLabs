@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ListtViewContextApp</string>
+    <string name="menu_remove">Remove</string>
+    <string name="menu_copy">Copy</string>
+</resources>

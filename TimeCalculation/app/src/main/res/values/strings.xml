@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TimeCalculation</string>
+    <string name="seconds">Seconds</string>
+    <string name="milliseconds">Milliseconds</string>
+    <string name="microseconds">Microseconds</string>
+    <string name="title">time calculation</string>
+    <string name="_10">10</string>
+</resources>
